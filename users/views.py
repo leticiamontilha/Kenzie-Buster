@@ -14,7 +14,6 @@ class UserView(APIView):
     
     def post(self, request: Request) -> Response:
         serializer = UserSerializer(data=request.data)
-        print(request.data)
         
         serializer.is_valid(raise_exception=True)
 
