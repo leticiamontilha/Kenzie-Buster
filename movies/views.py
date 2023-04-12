@@ -3,19 +3,14 @@ from rest_framework.views import APIView, Request, Response, status
 from movies.models import Movie
 from movies.serializers import MovieSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import (
-    IsAdminUser,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly
-)
 from django.shortcuts import get_object_or_404
-from users.permissions import IsReadOnly, isUserAuth
+from users.permissions import IsAdminOrReadOnLy
 # Create your views here.
 
 
 class MovieView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [isUserAuth]
+    permission_classes = [IsAdminOrReadOnLy]
 
     def get(self, request: Request) -> Response:
         movies = Movie.objects.all()
@@ -35,7 +30,7 @@ class MovieView(APIView):
 
 class MovieDetailView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [isUserAuth]
+    permission_classes = [IsAdminOrReadOnLy]
     
     def get(self, request: Request, movie_id) -> Response:
         movie = get_object_or_404(Movie, id=movie_id)
