@@ -4,7 +4,7 @@ from users.models import User
 
 
 class IsAdminOrReadOnLy(permissions.BasePermission):
-    def has_permission(self, request, view) -> bool:
+    def has_permission(self, request: Request, view: View) -> bool:
         if request.method in permissions.SAFE_METHODS:
             return True
 
@@ -14,6 +14,9 @@ class IsAdminOrReadOnLy(permissions.BasePermission):
         )
     
 
-class IsUserOwnerOrAdm(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_employee or obj == request.user
+class IsUserOwner(permissions.BasePermission):
+    def has_object_permission(self, request: Request, view: View, user: User) -> bool:
+        if user == request.user or request.user.is_employee:
+            return True
+        
+        return False
